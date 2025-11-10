@@ -1,0 +1,116 @@
+/* Importar una fuente similar a la de las imágenes */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap');
+
+:root {
+    --color-title-fuga: #8a2be2;
+    --color-title-cosmica: #ffffff;
+    --color-menu-text: #ffffff;
+    --color-menu-hover: #b8b8b8;
+    --font-fancy: 'Montserrat', sans-serif;
+    --underline-color: #ffffff; /* Color de la barra/subrayado */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-fancy);
+}
+
+#main-menu {
+    background-image: url('./Principal.PNG'); /* Asegúrate de que Principal.PNG esté en la carpeta Menu */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 3% 5%;
+    box-sizing: border-box;
+}
+
+.title-fuga {
+    font-size: 5vw;
+    font-weight: 700;
+    color: var(--color-title-fuga);
+    margin-bottom: -2vw;
+    letter-spacing: 0.15em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.title-cosmica {
+    font-size: 5vw;
+    font-weight: 400;
+    color: var(--color-title-cosmica);
+    margin-bottom: 5vh;
+    letter-spacing: 0.15em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10vh;
+}
+
+/* **MODIFICACIÓN AQUÍ** */
+.menu-button {
+    background: none;
+    border: none;
+    color: var(--color-menu-text);
+    font-family: var(--font-fancy);
+    font-size: 1.8vw;
+    font-weight: 100;
+    text-align: left;
+    padding: 0.5vh 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.5;
+    position: relative; /* Importante para posicionar el pseudo-elemento */
+    overflow: hidden; /* Asegura que la barra no se desborde al principio */
+    transition: color 0.3s ease; /* Transición para el color del texto */
+    padding-right: 20px; /* Espacio extra para la barra a la derecha si la queremos */
+}
+
+.menu-button:hover {
+    color: var(--color-menu-hover);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Pseudo-elemento para la barra de efecto */
+.menu-button::after {
+    content: ''; /* Obligatorio para pseudo-elementos */
+    position: absolute;
+    bottom: 0.5vh; /* Ajusta la posición vertical de la barra */
+    left: 0;
+    width: 0; /* Empieza sin ancho */
+    height: 3px; /* Grosor de la barra */
+    background-color: var(--underline-color);
+    transition: width 0.3s ease-out; /* Transición para el ancho de la barra */
+}
+
+.menu-button:hover::after {
+    width: 100%; /* La barra se expande a todo el ancho del botón */
+    /* Si quieres que se vea un poco más allá del texto, podrías usar un valor fijo o calculado */
+    /* width: calc(100% + 10px); */ 
+}
+
+
+/* Media query para hacer el diseño más legible en pantallas pequeñas */
+@media (max-width: 768px) {
+    .title-fuga, .title-cosmica {
+        font-size: 10vw;
+        margin-bottom: -4vw;
+    }
+    .menu-button {
+        font-size: 4vw;
+    }
+    .menu-button::after {
+        height: 2px; /* Ajusta el grosor en pantallas pequeñas */
+    }
+}

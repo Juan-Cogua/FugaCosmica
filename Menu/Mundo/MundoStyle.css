@@ -1,0 +1,120 @@
+/* Importar fuente */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap');
+
+:root {
+    --font-fancy: 'Montserrat', sans-serif;
+    --text-color: #ffffff;
+    --title-word-color: #b081c7; /* Color morado suave del título "World I" */
+    --icon-color: #ffffff;
+    --icon-shadow: rgba(144, 238, 144, 0.8); /* Sombra para el resplandor verde */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-fancy);
+}
+
+#mundo-container {
+    background-image: url('./Mundo.PNG'); /* Asegúrate de que Mundo.PNG esté en la carpeta Mundo */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    padding-top: 5vh;
+}
+/* --- Título "Choose World I" --- */
+
+.header-content {
+    display: flex;
+    position: relative;
+    z-index: 10;
+    padding-left: 10vw;
+}
+
+.title-choose {
+    font-size: 5vw;
+    font-weight: 100;
+    color: var(--text-color);
+    margin: 0;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.title-world {
+    font-size: 5vw;
+    font-weight: 400;
+    color: var(--title-word-color);
+    margin: 0;
+    margin-left: 1.5vw;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Botón de Regreso (Flecha) --- */
+
+.back-button {
+    position: absolute;
+    top: 3vh;
+    left: 3vw;
+    font-size: 3vw; 
+    color: var(--text-color);
+    text-decoration: none;
+    z-index: 20;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+}
+
+/* --- Contenedor de Selección (Signos) --- */
+
+.planet-selection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50vw;
+    height: 50vw;
+}
+
+.level-button {
+    background: none;
+    border: none;
+    color: var(--icon-color);
+    font-size: 8vw;
+    cursor: pointer;
+    position: absolute;
+    padding: 0;
+    z-index: 10;
+    
+    /* Efecto de resplandor para los botones */
+    text-shadow: 0 0 10px var(--icon-shadow), 0 0 20px var(--icon-shadow);
+    transition: text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.level-button:hover {
+    /* Aumenta el resplandor al pasar el cursor */
+    text-shadow: 0 0 15px var(--icon-shadow), 0 0 30px var(--icon-shadow), 0 0 40px var(--icon-shadow);
+    transform: scale(1.1);
+}
+
+/* Estilo para las imágenes de los signos */
+.level-image {
+    width: 10vw;
+    height: 10vw;
+    object-fit: contain;
+    pointer-events: none; /* Evita que la imagen interfiera con el botón */
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
