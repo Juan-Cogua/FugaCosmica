@@ -17,27 +17,41 @@ body, html {
     font-family: var(--font-fancy);
 }
 
+/* --- CONTENEDOR PRINCIPAL (#mundo-container) --- */
 #mundo-container {
-    background-image: url('./Mundo.PNG'); /* Asegúrate de que Mundo.PNG esté en la carpeta Mundo */
-    background-size: cover;
+    /* **CAMBIO CLAVE 1: Ajuste de Fondo** */
+    background-color: black; /* Rellena el espacio sobrante con negro */
+    background-image: url('./Mundo.PNG'); 
+    background-size: contain; /* Asegura que la imagen se vea completa sin cortarse */
     background-position: center;
     background-repeat: no-repeat;
+    
     height: 100vh;
     width: 100vw;
+    
+    /* **CAMBIO CLAVE 2: Estructura y Posición del Título** */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centra los elementos horizontalmente */
+    /* Distribuye el espacio entre el título, el centro y el margen inferior */
+    justify-content: space-between; 
+    
     position: relative;
     box-sizing: border-box;
-    padding-top: 5vh;
+    /* Usamos padding para el margen superior e inferior */
+    padding-top: 5vh; 
+    padding-bottom: 5vh;
 }
+/* ---------------------------------------------------------------- */
+
 /* --- Título "Choose World I" --- */
 
 .header-content {
     display: flex;
     position: relative;
     z-index: 10;
-    padding-left: 10vw;
+    /* Eliminar el padding-left para que el título se centre con align-items: center en el padre */
+    /* padding-left: 10vw; <--- ELIMINADO */
 }
 
 .title-choose {
@@ -87,34 +101,57 @@ body, html {
     transform: translate(-50%, -50%);
     width: 50vw;
     height: 50vw;
+    display: block; 
 }
 
-.level-button {
-    background: none;
-    border: none;
-    color: var(--icon-color);
-    font-size: 8vw;
+/* --- ESTILOS DE LOS SÍMBOLOS (EMOJIS) --- */
+a.level-emoji {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; 
     cursor: pointer;
-    position: absolute;
+    position: absolute; 
     padding: 0;
     z-index: 10;
+
+    /* **TAMAÑO PEQUEÑO SOLICITADO** */
+    font-size: 3vw; 
     
-    /* Efecto de resplandor para los botones */
+    color: var(--icon-color); 
     text-shadow: 0 0 10px var(--icon-shadow), 0 0 20px var(--icon-shadow);
     transition: text-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.level-button:hover {
-    /* Aumenta el resplandor al pasar el cursor */
+a.level-emoji:hover {
     text-shadow: 0 0 15px var(--icon-shadow), 0 0 30px var(--icon-shadow), 0 0 40px var(--icon-shadow);
     transform: scale(1.1);
 }
 
-/* Estilo para las imágenes de los signos */
-.level-image {
-    width: 10vw;
-    height: 10vw;
-    object-fit: contain;
-    pointer-events: none; /* Evita que la imagen interfiera con el botón */
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+/* --- Posicionamiento Individual (Ajustado para el CENTRO del planeta) --- */
+
+a.aries {
+    /* Centrado horizontal (casi 50%) y más hacia abajo (cerca del centro vertical) */
+    top: 30%; 
+    left: 45%; 
+}
+
+a.taurus {
+    /* Más cerca del centro vertical (45%) y más hacia el centro horizontal */
+    top: 45%; 
+    left: 30%; 
+}
+
+a.gemini {
+    /* Más cerca del centro vertical (45%) y más hacia el centro horizontal */
+    top: 45%; 
+    right: 30%; 
+    left: auto;
+}
+
+a.cancer {
+    /* Centrado horizontal (casi 50%) y más hacia arriba (cerca del centro vertical) */
+    bottom: 30%; 
+    left: 45%;
+    top: auto; 
 }
