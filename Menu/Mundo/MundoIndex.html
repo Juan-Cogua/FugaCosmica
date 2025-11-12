@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuga Cósmica - Seleccionar Mundo</title>
     <link rel="stylesheet" href="MundoStyle.css">
-    </head>
+</head>
 <body>
 
     <div id="mundo-container">
-        <a href="C:\Users\A175692\Documents\GitHub\FugaCosmica\Menu\MenuIndex.html" class="back-button">
+        <a href="C:\Users\A312050\Documents\GitHub\FugaCosmica\Menu\MenuIndex.html" class="back-button">
             ↩
         </a>
 
@@ -19,23 +19,51 @@
         </div>
 
         <div class="planet-selection">
-            <a class="level-emoji aries" href="C:\Users\A175692\Documents\GitHub\FugaCosmica\Menu\Mundo\Nivel1\NivelAries.html">
+            <a class="level-emoji aries" href="#">
                 ♈
-            
+            </a>
             <a class="level-emoji taurus" href="C:\Users\A175692\Documents\GitHub\FugaCosmica\Menu\Mundo\Nivel2\NivelTauro.html">
                 ♉
             </a>
-            
             <a class="level-emoji gemini" href="C:\Users\A175692\Documents\GitHub\FugaCosmica\Menu\Mundo\Nivel3\NivelGeminis.html">
                 ♊
             </a>
-            
             <a class="level-emoji cancer" href="C:\Users\A175692\Documents\GitHub\FugaCosmica\Menu\Mundo\Nivel4\NivelCancer.html">
                 ♋
             </a>
-        </div>
+            </div>
     </div>
 
-    <script src="MundoScript.js"></script> 
+<div id="modal-container" class="hidden">
+    <div id="modal-content">
+        <h3 class="modal-title">Nivel 1 (Aries)</h3>
+        <p class="modal-text">¡Enciende la llama!</p>
+        <p class="modal-text">Adéntrate en El Núcleo Elemental y comienza tu búsqueda. Debes recuperar el **Yelmo de Bronce de Aries** para avanzar.</p>
+
+        <div class="modal-actions">
+            <button id="modal-exit" class="modal-button exit">
+                <span class="icon">↩</span> Salir
+            </button>
+            <a href="C:\Users\A312050\Documents\GitHub\FugaCosmica\Menu\Mundo\Nivel1\NivelAries.html" id="modal-continue" class="modal-button continue">
+                <span class="icon">★</span> Seguir
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="artefact-inventory">
+    <h3 class="inventory-title">Artefactos Obtenidos</h3>
+    <div id="artefact-slots">
+        <div id="aries-artefact" class="artefact-slot" data-artefact="Yelmo de Bronce"></div>
+        <div id="tauro-artefact" class="artefact-slot" data-artefact="Toro Dorado"></div>
+        <div id="geminis-artefact" class="artefact-slot" data-artefact="Lira Gemela"></div>
+        <div id="cancer-artefact" class="artefact-slot" data-artefact="Caparazón Lunar"></div>
+    </div>
+</div>
+
+<button id="ares-event-button" class="hidden">
+    </button>
+
+<script src="MundoScript.js"></script>
 </body>
 </html>

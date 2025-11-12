@@ -103,3 +103,20 @@ h1 {
 .hidden {
     display: none;
 }
+.back-button {
+    position: absolute; /* Para posicionarlo en la esquina superior */
+    top: 3vh;
+    left: 3vw;
+    font-size: 2.5em; /* Un buen tamaño para la flecha */
+    color: #ffdd57; /* Color de las estadísticas */
+    text-decoration: none;
+    z-index: 20;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+    color: white;
+}

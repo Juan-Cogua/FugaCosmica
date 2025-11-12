@@ -155,3 +155,182 @@ a.cancer {
     left: 45%;
     top: auto; 
 }
+.hidden {
+    display: none !important;
+}
+
+#modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* Asegura que esté por encima de todo */
+}
+
+#modal-content {
+    background-color: #b081c7; /* Color morado suave (similar al de World I) */
+    color: var(--text-color);
+    padding: 25px 35px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    width: 350px;
+    text-align: left;
+    border: 2px solid #ffffff60;
+}
+
+.modal-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal-text {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    transition: background-color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    color: white; 
+}
+
+.modal-button .icon {
+    margin-right: 5px;
+    font-size: 1.2em;
+    line-height: 1; /* Para alinear bien los símbolos */
+}
+
+.modal-button.exit {
+    background-color: transparent;
+    border: 2px solid #f0f0f0;
+    color: #f0f0f0;
+}
+
+.modal-button.exit:hover {
+    background-color: #4a3455;
+    transform: scale(1.05);
+}
+
+.modal-button.continue {
+    background-color: #ffd700; /* Dorado para destacar */
+    color: #000;
+    border: 2px solid #ffd700;
+}
+
+.modal-button.continue:hover {
+    background-color: #ffc107;
+    transform: scale(1.05);
+}
+/* --- ESTILOS PARA EL RECTÁNGULO DE ARTEFACTOS --- */
+#artefact-inventory {
+    position: absolute;
+    bottom: 5vh; /* Ajusta la posición vertical según tu diseño */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%; /* Ancho del rectángulo */
+    max-width: 900px;
+    background-color: rgba(30, 30, 50, 0.85); /* Fondo oscuro semitransparente */
+    border: 3px solid #6a5acd; /* Borde morado/azul */
+    border-radius: 15px;
+    padding: 15px 20px;
+    box-shadow: 0 0 20px rgba(106, 90, 205, 0.5); /* Sombra para resaltar */
+    z-index: 5;
+    color: white;
+}
+
+.inventory-title {
+    text-align: center;
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #ffdd57; /* Color de las estadísticas */
+}
+
+#artefact-slots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Para que los slots pasen a la siguiente línea si es necesario */
+    gap: 15px;
+}
+
+.artefact-slot {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(10, 10, 20, 0.9);
+    border: 2px dashed #404040; /* Indica que está vacío */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    cursor: default;
+    transition: all 0.3s ease;
+    /* Estilo por defecto cuando está vacío */
+    opacity: 0.5;
+}
+
+.artefact-slot.unlocked {
+    border: 2px solid #ffdd57; /* Borde de oro cuando está desbloqueado */
+    opacity: 1;
+    box-shadow: 0 0 10px #ffdd57;
+}
+/* --- ESTILOS PARA EL BOTÓN DE EVENTO DE ARES (NUEVO) --- */
+
+#ares-event-button {
+    position: fixed; /* Fijo en la pantalla para flotar sobre todo */
+    z-index: 1000; /* Asegura que esté por encima de todos los elementos */
+    width: 90px; /* Tamaño del botón */
+    height: 90px;
+    
+    /* Configuración de la imagen Ares.jpg */
+    background-image: url('Ares.jpg'); /* Usa la imagen que subiste */
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%; /* Opcional: para darle forma circular */
+    border: 4px solid #ff4500; /* Borde rojo/naranja de Ares */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+    cursor: grab; /* Indica que es algo interactivo/móvil */
+    
+    /* Estado inicial: oculto y fuera de la vista */
+    display: block;
+    top: -200px; 
+    left: -200px;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transición para movimiento suave */
+}
+
+/* Clase para mostrar el botón */
+#ares-event-button.visible {
+    opacity: 1;
+}
+
+/* Clase para ocultar el botón completamente */
+.hidden {
+    display: none !important;
+}
