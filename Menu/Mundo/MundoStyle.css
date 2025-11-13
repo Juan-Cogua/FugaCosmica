@@ -303,34 +303,35 @@ a.cancer {
 /* --- ESTILOS PARA EL BOTÓN DE EVENTO DE ARES (NUEVO) --- */
 
 #ares-event-button {
-    position: fixed; /* Fijo en la pantalla para flotar sobre todo */
-    z-index: 1000; /* Asegura que esté por encima de todos los elementos */
-    width: 90px; /* Tamaño del botón */
-    height: 90px;
+    /* Posicionamiento y capa */
+    position: fixed; /* CLAVE: Permite que el botón se mueva libremente en la ventana */
+    z-index: 1000;   /* Asegura que esté por encima de todos los demás elementos */
     
-    /* Configuración de la imagen Ares.jpg */
-    background-image: url('Ares.jpg'); /* Usa la imagen que subiste */
-    background-size: cover;
+    /* Apariencia */
+    width: 80px;     /* Tamaño del botón */
+    height: 80px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    
+    /* Imagen de Ares: RUTA RELATIVA Y EXTENSIÓN CORRECTA */
+    background-image: url('Ares.png'); 
+    background-size: contain;         /* Ajusta la imagen al tamaño del botón */
+    background-repeat: no-repeat;
     background-position: center;
-    border-radius: 50%; /* Opcional: para darle forma circular */
-    border: 4px solid #ff4500; /* Borde rojo/naranja de Ares */
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
-    cursor: grab; /* Indica que es algo interactivo/móvil */
     
-    /* Estado inicial: oculto y fuera de la vista */
-    display: block;
-    top: -200px; 
-    left: -200px;
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transición para movimiento suave */
+    /* Estado inicial y Transición */
+    opacity: 0; /* Inicialmente invisible (controlado por JS) */
+    transition: opacity 0.5s ease-in-out, left 1s ease-in-out, top 1s ease-in-out; /* Transición para aparición y movimiento */
+    
+    /* Posición inicial fuera de la vista para evitar un "parpadeo" */
+    top: -100px;
+    left: -100px;
 }
 
-/* Clase para mostrar el botón */
-#ares-event-button.visible {
-    opacity: 1;
-}
-
-/* Clase para ocultar el botón completamente */
-.hidden {
+/* Solo mantengo la clase 'hidden' que usa 'display: none' para ocultarlo permanentemente */
+#ares-event-button.hidden {
     display: none !important;
 }
+

@@ -1,209 +1,268 @@
+// ===========================================
+// *** SELECTORES DEL JUEGO (DOM) ***
+// ===========================================
+const gameGrid = document.getElementById('game-grid'); 
+const startButton = document.getElementById('start-button'); 
+const scoreDisplay = document.getElementById('score'); 
+const livesDisplay = document.getElementById('lives'); 
+const messageDisplay = document.getElementById('message'); 
+const rewardContainer = document.getElementById('reward-message-container'); 
+
+// ===========================================
+// *** VARIABLES DE ESTADO Y CONFIGURACIÓN ***
+// ===========================================
+let score = 0;
+let lives = 3;
+let lastCell = -1; // Índice de la última casilla activa
+let gameInterval; // Temporizador principal (controla la aparición de Aries)
+let currentActiveCell = null; // La casilla activa en este momento
+let isGameRunning = false;
+let artefactGained = false; // Bandera para saber si el artefacto ya fue marcado
+
+// Constantes clave del juego
+const NUM_CELLS = 9;
+const ARIES_SYMBOL = '♈';
+const REWARD_SCORE = 10; // Puntaje para ganar el artefacto
+const SPEED_LEVELS = [5, 10, 15, 20]; // Puntos clave donde la dificultad aumenta
+const BASE_DURATION = 1000; // Tiempo que el símbolo está visible (ms)
+const BASE_INTERVAL = 1500; // Frecuencia con que aparece un nuevo símbolo (ms)
+let currentDuration = BASE_DURATION; 
+let currentInterval = BASE_INTERVAL;
+
+// ===========================================
+// *** FUNCIONES DE LA CUADRÍCULA Y MOVIMIENTO ***
+// ===========================================
+
+// 1. Crea dinámicamente la cuadrícula 3x3 (¡NUEVA / CORREGIDA!)
+function createGrid() {
+    // Limpia cualquier contenido previo
+    gameGrid.innerHTML = ''; 
+    
+    // Crea las 9 casillas
+    for (let i = 0; i < NUM_CELLS; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.setAttribute('data-index', i); 
+        gameGrid.appendChild(cell);
+    }
+}
+
+// 2. Elige una casilla diferente a la última
+function chooseRandomCell() {
+    const cells = document.querySelectorAll('.cell'); 
+    let newCellIndex;
+    
+    // Evita repetir la última casilla
+    do {
+        newCellIndex = Math.floor(Math.random() * NUM_CELLS);
+    } while (newCellIndex === lastCell);
+
+    lastCell = newCellIndex;
+    return cells[newCellIndex];
+}
+
+// 3. Muestra el símbolo en una casilla y establece un temporizador para penalizar si expira
+function showAries() {
+    // A. Limpiar la casilla anterior y penalizar si el jugador no hizo click a tiempo
+    if (currentActiveCell) {
+        // Llama a missAries() si el tiempo de la casilla anterior expiró
+        missAries(true); 
+    }
+
+    // B. Seleccionar y activar la nueva casilla
+    const newCell = chooseRandomCell();
+    currentActiveCell = newCell;
+    newCell.textContent = ARIES_SYMBOL;
+    newCell.classList.add('active-cell');
+
+    // C. Configurar el temporizador para que la casilla desaparezca/penalice
+    // Guardamos el ID del temporizador directamente en el objeto de la celda
+    newCell.timer = setTimeout(() => {
+        // Llama a missAries() despus de currentDuration milisegundos
+        // La bandera 'true' indica que fue un fallo por tiempo
+        missAries(true); 
+    }, currentDuration);
+}
+
+// ===========================================
+// *** LÓGICA DEL JUEGO: HIT/MISS ***
+// ===========================================
+
+// 4. Se ejecuta cuando el jugador ACERTA
+function hitAries() {
+    // 1. Limpiar inmediatamente la casilla activa
+    if (currentActiveCell) {
+        // Cancelar el temporizador pendiente (para que no penalice despus del acierto)
+        clearTimeout(currentActiveCell.timer); 
+        currentActiveCell.textContent = '';
+        currentActiveCell.classList.remove('active-cell');
+        currentActiveCell = null;
+    }
+    
+    // 2. Actualizar puntuación
+    score++;
+    scoreDisplay.textContent = score;
+    messageDisplay.textContent = '¡Impulso acertado! +1 punto.';
+    
+    // 3. Ajustar dificultad
+    upgradeDifficulty();
+
+    // 4. Comprobar si ganó el artefacto
+    if (score >= REWARD_SCORE && !artefactGained) {
+        // Solo si alcanza el score y no lo ha ganado antes
+        winArtefact();
+    }
+    
+    // 5. Reiniciar el ciclo principal de aparicin (limpiando el intervalo anterior)
+    clearInterval(gameInterval);
+    gameInterval = setInterval(showAries, currentInterval);
+}
+
+// 5. Se ejecuta cuando el jugador FALLA o el tiempo de la casilla expira (¡CORREGIDA!)
+// El parmetro 'isTimeout' nos dice si fue por tiempo (true) o por click en casilla vaca (false)
+function missAries(isTimeout = false) {
+    if (!isGameRunning) return; 
+
+    // 1. **CORRECCIÓN CLAVE: LIMPIAR LA CASILLA ACTIVA**
+    if (currentActiveCell) {
+        // Asegurarse de que el temporizador se cancela
+        clearTimeout(currentActiveCell.timer); 
+        // Quita el símbolo y la clase roja
+        currentActiveCell.textContent = ''; 
+        currentActiveCell.classList.remove('active-cell'); 
+        currentActiveCell = null; // Reinicia la variable
+    }
+    
+    // 2. Reducir vidas
+    lives--;
+    livesDisplay.textContent = lives;
+    messageDisplay.textContent = isTimeout ? 
+        '¡Demasiado lento! Has perdido una vida.' : 
+        '¡Fallo! Has perdido una vida.';
+
+    // 3. Detener el juego si se acaban las vidas
+    if (lives <= 0) {
+        endGame();
+    }
+    
+    // 4. Reiniciar el ciclo principal para que el juego continúe si hay vidas
+    if (isGameRunning) {
+        clearInterval(gameInterval);
+        gameInterval = setInterval(showAries, currentInterval);
+    }
+}
+
+
+// 6. Aumentar la velocidad del juego
+function upgradeDifficulty() {
+    // Verifica si la puntuacin es uno de los puntos clave de dificultad
+    if (SPEED_LEVELS.includes(score)) {
+        // Reducir el tiempo de duracin y el intervalo de aparicin
+        currentDuration = Math.max(200, currentDuration - 100); // Mínimo 200ms
+        currentInterval = Math.max(500, currentInterval - 150);  // Mínimo 500ms
+        
+        // Actualizar el intervalo principal con la nueva velocidad
+        clearInterval(gameInterval);
+        gameInterval = setInterval(showAries, currentInterval);
+        
+        messageDisplay.textContent += ` ¡Dificultad aumentada! Velocidad: ${currentDuration}ms.`;
+    }
+}
+
+// 7. Recompensa por ganar el juego
+function winArtefact() {
+    artefactGained = true; // Marca la bandera
+    
+    // Guardar el estado en el almacenamiento local (simulacin de guardar progreso)
+    let gainedArtefacts = JSON.parse(localStorage.getItem('gainedArtefacts')) || {};
+    gainedArtefacts.aries = true; // El Yelmo de Bronce de Aries fue ganado
+    localStorage.setItem('gainedArtefacts', JSON.stringify(gainedArtefacts));
+
+    // Mostrar el mensaje de recompensa
+    const rewardElement = document.createElement('p');
+    rewardElement.id = 'reward';
+    rewardElement.textContent = '🔱'; // Emoji del Yelmo de Bronce
+    rewardContainer.appendChild(rewardElement);
+    
+    messageDisplay.textContent = "¡Felicitaciones! Has ganado el Yelmo de Bronce de Aries. ¡Continúa!";
+}
+
+// 8. Finaliza el juego (¡CORREGIDA!)
+function endGame() {
+    isGameRunning = false;
+    clearInterval(gameInterval); 
+    startButton.textContent = 'Jugar de Nuevo';
+    startButton.classList.remove('hidden'); 
+    
+    messageDisplay.textContent = `Juego Terminado. Puntuación Final: ${score}.`;
+    
+    // **CORRECCIÓN CLAVE: Limpiar cualquier casilla que haya quedado activa**
+    if (currentActiveCell) {
+        clearTimeout(currentActiveCell.timer); // Cancelar su temporizador
+        currentActiveCell.textContent = '';
+        currentActiveCell.classList.remove('active-cell');
+        currentActiveCell = null;
+    }
+}
+
+// ===========================================
+// *** INICIO DEL JUEGO ***
+// ===========================================
+
+// Configura y comienza una nueva partida
+function startGame() {
+    // Resetear variables de estado
+    score = 0;
+    lives = 3;
+    currentDuration = BASE_DURATION; 
+    currentInterval = BASE_INTERVAL;
+    isGameRunning = true;
+    
+    // Actualizar interfaz
+    scoreDisplay.textContent = score;
+    livesDisplay.textContent = lives;
+    messageDisplay.textContent = '¡El juego ha comenzado! Busca el símbolo...';
+    startButton.classList.add('hidden'); 
+    
+    // Limpiar el contenedor de la recompensa visual (si existe)
+    rewardContainer.innerHTML = ''; 
+
+    // Iniciar el ciclo de aparición
+    gameInterval = setInterval(showAries, currentInterval);
+    
+    // Llamar a showAries inmediatamente para que el primer símbolo aparezca al instante
+    showAries();
+}
+
+// ===========================================
+// *** LISTENERS ***
+// ===========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // ===========================================
-    // *** SELECTORES DOM ***
-    // ===========================================
-    const ariesButton = document.querySelector('.level-emoji.aries');
-    const modalContainer = document.getElementById('modal-container');
-    const modalExitButton = document.getElementById('modal-exit');
-    const aresEventButton = document.getElementById('ares-event-button'); // NUEVO SELECTOR
-
-    // ===========================================
-    // *** CONFIGURACIÓN DEL JUEGO Y ARTEFACTOS ***
-    // ===========================================
+    // 1. Crear la cuadrícula al cargar la página (¡CLAVE!)
+    createGrid(); 
     
-    // Mapa de emojis para los artefactos.
-    const ARTEFACT_EMOJI_MAP = {
-        'aries': '🔱',      // Yelmo de Bronce
-        'tauro': '♉',      // Toro Dorado
-        'geminis': '♊',    // Lira Gemela
-        'cancer': '♋',     // Caparazón Lunar
-        // Añade el resto de los signos aquí.
-    };
-
-    // Ares Evento de Lógica
-    const SPAWN_INTERVAL = 5 * 60 * 1000; // 5 minutos en milisegundos
-    const MOVE_INTERVAL = 800;           // El botón se mueve cada 0.8 segundos
-    const DECAY_TIME = 10 * 1000;          // 10 segundos para hacer clic
-
-    let aresSpawnTimer; // Para el temporizador de 5 minutos
-    let aresDecayTimer; // Para el temporizador de 10 segundos
-    let aresMoveInterval; // Para el temporizador de movimiento
-
-    // ===========================================
-    // *** LÓGICA DE VENTANA MODAL ***
-    // ===========================================
-
-    // 1. Mostrar la modal al hacer clic en Aries
-    if (ariesButton && modalContainer) {
-        ariesButton.addEventListener('click', (event) => {
-            event.preventDefault(); 
-            modalContainer.classList.remove('hidden');
-        });
-    }
-
-    // 2. Ocultar la modal al hacer clic en 'Salir'
-    if (modalExitButton && modalContainer) {
-        modalExitButton.addEventListener('click', () => {
-            modalContainer.classList.add('hidden');
-        });
-    }
-    
-    // 3. Opcional: Ocultar la modal al hacer clic fuera del contenido
-    if (modalContainer) {
-        modalContainer.addEventListener('click', (event) => {
-            if (event.target === modalContainer) {
-                modalContainer.classList.add('hidden');
-            }
-        });
-    }
-
-    // ===========================================
-    // *** LÓGICA DEL INVENTARIO Y ARTEFACTOS ***
-    // ===========================================
-    
-    function loadArtefacts() {
-        // Obtiene la lista de artefactos ganados desde localStorage
-        const gainedArtefacts = JSON.parse(localStorage.getItem('gainedArtefacts')) || {};
-        const slots = document.querySelectorAll('.artefact-slot');
-
-        slots.forEach(slot => {
-            const artefactKey = slot.id.replace('-artefact', '');
-
-            if (gainedArtefacts[artefactKey]) {
-                slot.classList.add('unlocked');
-                slot.textContent = ARTEFACT_EMOJI_MAP[artefactKey] || '✨';
-                slot.setAttribute('title', `Artefacto Ganado: ${slot.dataset.artefact}`);
-            } else {
-                slot.classList.remove('unlocked');
-                slot.textContent = '';
-                slot.setAttribute('title', `Bloqueado: ${slot.dataset.artefact}`);
-            }
-        });
-    }
-
-    // ===========================================
-    // *** LÓGICA DEL EVENTO DE ARES (NUEVO) ***
-    // ===========================================
-
-    /**
-     * Mueve el botón de Ares a una posición aleatoria en la pantalla.
-     * Se asegura de que no se superponga con el inventario o la cabecera.
-     */
-    function moveAresButton() {
-        const buttonWidth = aresEventButton.offsetWidth;
-        const buttonHeight = aresEventButton.offsetHeight;
-        
-        // Excluir un área cerca del inventario (por ejemplo, el 15% inferior de la pantalla)
-        const exclusionHeight = window.innerHeight * 0.15;
-        
-        // Rango máximo donde se puede mover el centro del botón
-        const maxX = window.innerWidth - buttonWidth;
-        const maxY = window.innerHeight - buttonHeight - exclusionHeight;
-
-        // Si la pantalla es demasiado pequeña, no hacer nada
-        if (maxX <= 0 || maxY <= 0) return;
-        
-        // Generamos posiciones aleatorias
-        const randomX = Math.floor(Math.random() * maxX);
-        const randomY = Math.floor(Math.random() * maxY);
-
-        // Aplicamos la posición
-        aresEventButton.style.left = `${randomX}px`;
-        aresEventButton.style.top = `${randomY}px`;
-    }
-
-    /**
-     * Inicia el evento de Ares (aparece y comienza a moverse).
-     */
-    function startAresEvent() {
-        if (!aresEventButton) return;
-        
-        // 1. Mostrar el botón
-        aresEventButton.classList.remove('hidden');
-        // Usamos setTimeout en lugar de añadir/quitar 'visible' inmediatamente
-        // para dar tiempo a que las transiciones CSS se apliquen.
-        setTimeout(() => aresEventButton.classList.add('visible'), 50); 
-        
-        moveAresButton();
-        
-        // 2. Temporizador de movimiento constante
-        aresMoveInterval = setInterval(moveAresButton, MOVE_INTERVAL);
-        
-        // 3. Temporizador de Decadencia (si no se hace clic en 10 segundos)
-        aresDecayTimer = setTimeout(() => {
-            console.log("¡Tiempo de Ares expirado!");
-            loseArtefact(); // Se ejecuta si expira el tiempo
-            endAresEvent();
-        }, DECAY_TIME);
-        
-        // 4. Asignar el listener de clic para que el jugador lo detenga
-        aresEventButton.onclick = () => {
-            cancelAresEvent(); // Si se hace clic
-        };
-        
-        alert("¡Alerta! Ares ha aparecido. Haz clic en su imagen antes de 10 segundos para proteger tus artefactos.");
-    }
-
-    /**
-     * Termina el evento, limpia temporizadores y oculta el botón.
-     */
-    function endAresEvent() {
-        clearTimeout(aresDecayTimer);
-        clearInterval(aresMoveInterval);
-        aresEventButton.classList.remove('visible');
-        
-        // Ocultar completamente después de la transición
-        setTimeout(() => {
-            aresEventButton.classList.add('hidden');
-            aresEventButton.onclick = null; // Limpiar listener
-        }, 500); // 500ms es la duración de la transición CSS
-        
-        // Reiniciar el temporizador de 5 minutos para el próximo evento
-        aresSpawnTimer = setTimeout(startAresEvent, SPAWN_INTERVAL);
-    }
-    
-    /**
-     * Función si el jugador hace clic a tiempo.
-     */
-    function cancelAresEvent() {
-        alert("¡Has evitado el ataque de Ares y protegido tus artefactos!");
-        endAresEvent(); // Terminar y reiniciar el temporizador de 5 minutos
-    }
-
-    /**
-     * Lógica para la pérdida de un artefacto.
-     */
-    function loseArtefact() {
-        let gainedArtefacts = JSON.parse(localStorage.getItem('gainedArtefacts')) || {};
-        
-        // Obtener solo las claves de los artefactos que SÍ han sido ganados
-        const keys = Object.keys(gainedArtefacts).filter(key => gainedArtefacts[key]);
-
-        if (keys.length > 0) {
-            // Elegir un artefacto ganado al azar
-            const lostKey = keys[Math.floor(Math.random() * keys.length)];
-            const lostArtefactName = document.getElementById(`${lostKey}-artefact`).dataset.artefact;
-            
-            // Eliminarlo del localStorage y actualizar
-            delete gainedArtefacts[lostKey]; 
-            localStorage.setItem('gainedArtefacts', JSON.stringify(gainedArtefacts));
-            
-            alert(`¡FRACASO! Ares ha robado el artefacto: **${lostArtefactName}**! Debes ganarlo de nuevo.`);
-            loadArtefacts(); // Actualizar el inventario visual
-        } else {
-            alert("¡Ares apareció pero no tienes artefactos para robar! Tuviste suerte... esta vez.");
+    // 2. Listener para el botón de inicio
+    startButton.addEventListener('click', () => {
+        if (!isGameRunning) {
+            startGame();
         }
-    }
-
-
-    // ===========================================
-    // *** INICIALIZACIÓN ***
-    // ===========================================
+    });
     
-    // Cargar los artefactos al inicio
-    loadArtefacts(); 
+    // 3. Listener para la cuadrícula (detecta clicks en cualquier celda)
+    gameGrid.addEventListener('click', (event) => {
+        if (!isGameRunning) return;
 
-    // Iniciar el temporizador para el primer evento de Ares (5 minutos)
-    // Para probarlo, puedes cambiar SPAWN_INTERVAL a un valor más pequeño, ej: 10000 (10 segundos)
-    aresSpawnTimer = setTimeout(startAresEvent, SPAWN_INTERVAL); 
+        const clickedCell = event.target;
+
+        // Asegúrate de que el clic fue en una casilla (y no en el contenedor vaco)
+        if (clickedCell.classList.contains('cell')) {
+            // Verifica si el clic fue en la casilla activa
+            if (clickedCell === currentActiveCell) {
+                hitAries();
+            } else {
+                // El clic fue en una casilla vaca
+                missAries(false); // La bandera 'false' indica que fue un fallo por click
+            }
+        }
+    });
 });

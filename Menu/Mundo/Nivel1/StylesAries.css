@@ -11,7 +11,17 @@ h1 {
     font-size: 2.5em;
 }
 
-/* Contenedor de estadísticas: alinea Puntuación y Vidas horizontalmente */
+/* --- Botón de Regreso --- */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: #ffdd57;
+    font-size: 2em;
+}
+
+/* --- Estadísticas y Mensajes --- */
 #stats-container {
     display: flex;
     justify-content: center;
@@ -21,47 +31,15 @@ h1 {
     color: #ffdd57; 
 }
 
-/* Contenedor del mensaje de recompensa: le da un espacio fijo y lo centra */
 #reward-message-container {
-    height: 30px; /* Altura suficiente para el texto */
+    height: 30px; 
     margin-bottom: 10px;
-    display: flex; /* Asegura que el contenido (p#reward) esté centrado */
+    display: flex; 
     justify-content: center;
     align-items: center;
 }
 
-/* Estilo para el artefacto: el texto en sí */
-#reward {
-    color: #FFD700; /* Dorado */
-    font-weight: bold;
-    animation: pulse 1s infinite alternate; 
-}
-
-/* Animación de pulso para la recompensa */
-@keyframes pulse {
-    from { transform: scale(1); opacity: 1; }
-    to { transform: scale(1.05); opacity: 0.8; }
-}
-
-
-/* Estilo para el botón de inicio */
-#start-button {
-    padding: 10px 25px;
-    font-size: 1.2em;
-    cursor: pointer;
-    background-color: #ff0000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    transition: background-color 0.2s;
-}
-
-#start-button:hover {
-    background-color: #cc0000;
-}
-
-/* Cuadrícula del juego (3x3) */
+/* --- Cuadrícula del juego (3x3) CLAVE --- */
 #game-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
@@ -74,7 +52,7 @@ h1 {
     border-radius: 15px;
 }
 
-/* Casillas individuales */
+/* --- Casillas individuales CLAVE --- */
 .cell {
     background-color: #333; 
     border: 2px solid #555;
@@ -84,39 +62,40 @@ h1 {
     align-items: center;
     font-size: 4em; 
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
     user-select: none; 
 }
 
-/* Clase de la casilla activa */
+/* Clase de la casilla activa (donde está el símbolo) */
 .active-cell {
-    background-color: #ff0000; 
-    box-shadow: 0 0 15px #ff4500;
+    background-color: #ff0000; /* Fondo rojo cuando está activa */
+    box-shadow: 0 0 15px #ff4500; /* Resplandor rojo/naranja */
 }
 
-/* Clase de casilla fallada por tiempo */
-.missed-cell {
-    background-color: #8b0000; 
+/* Estilo del botón de inicio */
+#start-button {
+    padding: 10px 25px;
+    font-size: 1.2em;
+    cursor: pointer;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.2s;
 }
 
-/* Clase para ocultar elementos */
-.hidden {
+#start-button.hidden {
     display: none;
 }
-.back-button {
-    position: absolute; /* Para posicionarlo en la esquina superior */
-    top: 3vh;
-    left: 3vw;
-    font-size: 2.5em; /* Un buen tamaño para la flecha */
-    color: #ffdd57; /* Color de las estadísticas */
-    text-decoration: none;
-    z-index: 20;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+
+#reward {
+    color: #FFD700; /* Dorado */
+    font-weight: bold;
+    animation: pulse 1s infinite alternate; 
 }
 
-.back-button:hover {
-    transform: scale(1.1);
-    color: white;
+@keyframes pulse {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(1.05); opacity: 0.8; }
 }
