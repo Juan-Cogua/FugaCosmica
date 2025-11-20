@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuga Cósmica - Seleccionar Mundo</title>
+    <link rel="stylesheet" href="MundoStyle.css">
+</head>
+<body>
+
+    <div id="mundo-container">
+        <a href="../menu/menu.html" class="back-button">
+            ↩
+        </a>
+
+        <img class="player-avatar" id="player-avatar" src="/assets/img/av1.png" alt="Avatar" style="position:absolute; top:3vh; right:3vw; width:4.5rem; height:4.5rem; border-radius:50%; border:2px solid #FFD700; box-shadow:0 0 8px rgba(0,0,0,0.6); z-index:25; background:#ffffff; object-fit:cover; display:block;">
+
+        <div class="header-content">
+            <h1 class="title-choose">Choose</h1>
+            <h1 class="title-world">World I</h1>
+        </div>
+
+        <div class="planet-selection">
+            <a class="level-emoji aries" href="Nivel 1/NivelAries.html">
+                ♈
+            </a>
+            <a class="level-emoji taurus" href="Nivel 2/NivelTauro.html">
+                ♉
+            </a>
+            <a class="level-emoji gemini" href="Nivel 3/NivelGeminis.html">
+                ♊
+            </a>
+            <a class="level-emoji cancer" href="Nivel 4/NivelCancer.html">
+                ♋
+            </a>
+            </div>
+    </div>
+
+<div id="modal-container" class="hidden">
+    <div id="modal-content">
+        <h3 class="modal-title">Nivel 1 (Aries)</h3>
+        <p class="modal-text">¡Enciende la llama!</p>
+        <p class="modal-text">Adéntrate en El Núcleo Elemental y comienza tu búsqueda. Debes recuperar el **Yelmo de Bronce de Aries** para avanzar.</p>
+
+        <div class="modal-actions">
+            <button id="modal-exit" class="modal-button exit">
+                <span class="icon">↩</span> Salir
+            </button>
+            <a href="Nivel 1/NivelAries.html" id="modal-continue" class="modal-button continue">
+                <span class="icon">★</span> Seguir
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="artefact-inventory">
+    <h3 class="inventory-title">Artefactos Obtenidos</h3>
+    <div id="artefact-slots">
+        <div id="aries-artefact" class="artefact-slot" data-artefact="Yelmo de Bronce"></div>
+        <div id="tauro-artefact" class="artefact-slot" data-artefact="Toro Dorado"></div>
+        <div id="geminis-artefact" class="artefact-slot" data-artefact="Lira Gemela"></div>
+        <div id="cancer-artefact" class="artefact-slot" data-artefact="Caparazón Lunar"></div>
+    </div>
+</div>
+
+<script src="MundoScript.js"></script>
+<script src="avatar.js"></script>
+</body>
+</html>
