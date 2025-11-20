@@ -1,0 +1,157 @@
+/* Importar estilos generales del mundo; luego sobreescribir aquí */
+@import url("../MundoStyle.css");
+
+/* Estilos específicos de Tauro (no poner CSS en el HTML) */
+body {
+    /* Hereda la tipografía/color del Mundo; si el Mundo define font-family será usado */
+    margin: 20px;
+    background: var(--mundo-bg, #f5f2ff); /* fallback si MundoStyle no define */
+    color: var(--mundo-text, #222);
+    font-family: var(--mundo-font, "Segoe UI", Roboto, Arial, sans-serif);
+}
+
+h1 {
+    margin-bottom: 20px;
+    /* Color de Tauro (Tierra): verde o un dorado terroso */
+    color: #a47b4e; 
+    text-shadow: 0 0 10px #a47b4e;
+}
+
+/* Estilo para el botón de regreso */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #a47b4e;
+    text-decoration: none;
+    padding: 10px;
+    border: 2px solid #a47b4e;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    z-index: 10;
+}
+
+.back-button:hover {
+    background-color: rgba(164, 123, 78, 0.2);
+}
+
+/* Estilo para la caja de puntuación */
+#score-container {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #e6e6e6;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#artifact-message {
+    color: #f5d782; /* Un color de "recompensa" */
+    font-style: italic;
+    font-size: 18px;
+}
+
+#board {
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(3,1fr);
+    gap: 8px;
+}
+
+.tile {
+    /* Color de losa: Un tono de marrón o púrpura terroso */
+    background: #6b584d; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform .15s;
+    color: #fff;
+}
+
+.tile:hover {
+    transform: scale(1.08);
+    background: #7d6b5e;
+}
+
+.empty {
+    background: transparent;
+    border: 2px dashed #6b584d;
+    cursor: default;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    /* Color de botón: Dorado/Tauro */
+    background: #a47b4e; 
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #000;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #8e6c43;
+}
+
+/* Contenedor de score similar al Mundo */
+.score-container {
+    background: rgba(255,255,255,0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.artifact-message {
+    margin-left: 12px;
+    font-weight: 600;
+    color: #0a7a00;
+}
+
+/* Tablero y piezas */
+.board {
+    width: 360px;
+    height: 360px;
+    border-radius: 12px;
+    border: 2px solid rgba(0,0,0,0.08);
+    background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(250,250,255,0.9));
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 8px;
+}
+
+/* Botón primario consistente con Mundo */
+.btn-primary {
+    background: linear-gradient(180deg, var(--mundo-button, #7b61ff), #5a3be8);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary:active { transform: translateY(1px); }
+
+/* Botón de volver */
+.back-button {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--mundo-text, #222);
+    background: rgba(255,255,255,0.7);
+    padding: 6px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0,0,0,0.06);
+}

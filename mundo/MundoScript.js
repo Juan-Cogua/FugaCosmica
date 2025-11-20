@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalContainer = document.getElementById('modal-container');
     const modalExitButton = document.getElementById('modal-exit');
     
+    const taurusButton = document.querySelector('.level-emoji.taurus');
+    const taurusModal = document.getElementById('modal-container-tauro');
+    const taurusExitButton = document.getElementById('modal-exit-tauro');
+    
     // ELIMINADO: const aresEventButton = document.getElementById('ares-event-button'); 
 
     // ===========================================
@@ -48,6 +52,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.target === modalContainer) {
                 modalContainer.classList.add('hidden');
             }
+        });
+    }
+
+    // Mostrar la modal al hacer clic en Tauro (misma UX que Aries)
+    if (taurusButton && taurusModal) {
+        taurusButton.addEventListener('click', (event) => {
+            event.preventDefault(); // evita navegación inmediata
+            taurusModal.classList.remove('hidden');
+        });
+    }
+
+    if (taurusExitButton && taurusModal) {
+        taurusExitButton.addEventListener('click', () => {
+            taurusModal.classList.add('hidden');
+        });
+    }
+
+    if (taurusModal) {
+        taurusModal.addEventListener('click', (event) => {
+            if (event.target === taurusModal) taurusModal.classList.add('hidden');
         });
     }
 
